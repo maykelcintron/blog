@@ -1,19 +1,37 @@
-import { useState} from "react";
+import { useState, useEffect } from "react";
 import AstroLogo from "../../assets/icons/Astro_light.svg";
 import AstroDarkLogo from "../../assets/icons/Astro_dark.svg";
 import SunIcon from "../../assets/icons/sun.svg";
 import MoonIcon from "../../assets/icons/moon.svg";
 
 export default function Header() {
-  const [isDark, setIsDark] = useState(false);
-  const [astroLogo, setAstroLogo] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    const darkMode = localStorage.getItem('darkMode');
+    return darkMode === 'true';
+  });
+  const [astroLogo, setAstroLogo] = useState(() => {
+    const darkMode = localStorage.getItem('darkMode');
+    return darkMode === 'true';
+  });
+  
+  // Efecto para aplicar el tema al cargar
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark', 'dark:bg-gray-800');
+    } else {
+      document.documentElement.classList.remove('dark', 'dark:bg-gray-800');
+    }
+  }, []);
   
   const handleClick = () => {
+    const newDarkMode = !isDark;
     document.documentElement.classList.toggle('dark');
     document.documentElement.classList.toggle('dark:bg-gray-800');
     
-    setIsDark(!isDark)
-    setAstroLogo(!astroLogo);
+    localStorage.setItem('darkMode', newDarkMode);
+
+    setIsDark(newDarkMode);
+    setAstroLogo(newDarkMode);
   }
 
   return (
